@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+
+<div id="displayArea">
+</div>
+
+{%  raw  %}
+    <script id="myTemplate" type="text/x-handlebars-template">
+        <div class="jumbotron">
+
+            <h1>Hello {{toLowercase name}}</h1>
+
+
+            {{#ifCond Age}}
+                <p>You are allowed to drink !</p>
+            {{else}}
+                <p>you are Under Age </p>
+            {{/ifCond}}
+
+
+
+            <ul>
+                {{#each languages}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </script>
+{%  endraw    %}
+
+<script>
+
+    Handlebars.registerHelper('ifCond', function(age, options) {
+        console.log("age", age);
+
+        if(age >=  24)
+        {
+            return options.fn(this);
+        }else{
+            return options.inverse(this);
+        }
+
+    });
+
+    Handlebars.registerHelper('toLowercase',titleCase);
+
+    var tmpHtml = document.getElementById("myTemplate").innerHTML;
+    var template = Handlebars.compile(tmpHtml);
+    var MyData = {
+        "name":"soumil shah",
+        "JobTitle":"Full stack Software Developer ",
+        "Age":25,
+        "languages":["Python", "C#"]
+    };
+    var data = template(MyData);
+    document.getElementById("displayArea").innerHTML += data;
+
+    function toUpperCase(str) {
+        return str.toUpperCase();
+    }
+
+    function toLowercase(str) {
+        return str.toLowerCase();
+    }
+
+    function titleCase(str) {
+        str = str.toLowerCase().split(' ');
+        for (var i = 0; i < str.length; i++) {
+            str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+        }
+        return str.join(' ');
+    }
+
+
+
+</script>
+
+
+{% endblock %}
